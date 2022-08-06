@@ -15,12 +15,26 @@ namespace Solid {
             string dbPath = @"C:\Cursos\Curso Programacion en C#\Apartado 4 - Conceptos avanzados C#\Principios SOLID\PrincipioDeInversionDeDependencias - D\db.json";
             string httpOrigin = @"https://jsonplaceholder.typicode.com/todos/";
 
+            // Usamos una clase que implementa IInfo
             IInfo info = new InfoByFile(origin);
 
             Monitor monitor = new Monitor(origin, info);
             monitor.Show();
 
             FileDB fileDB = new FileDB(dbPath, origin, info);
+            await fileDB.Save();
+
+
+            Console.WriteLine("\n\n");
+
+
+            // Usamos otra clase que implementa IInfo
+            info = new InfoByRequest(httpOrigin);
+
+            monitor = new Monitor(httpOrigin, info);
+            monitor.Show();
+
+            fileDB = new FileDB(dbPath, httpOrigin, info);
             await fileDB.Save();
         }
     }
@@ -38,7 +52,7 @@ namespace Solid {
             var posts = await _info.Get();
 
             foreach (var post in posts) {
-                Console.WriteLine(post.title);
+                Console.WriteLine(post.Title);
             }
         }
     }
@@ -96,9 +110,9 @@ namespace Solid {
     }
 
     public class Post {
-        public int userId { get; set; }
-        public int id { get; set; }
-        public string title { get; set; }
-        public bool completed { get; set; }
+        public int UserId { get; set; }
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public bool Completed { get; set; }
     }
 }
